@@ -6,7 +6,7 @@ from typing import Callable, cast
 import voluptuous as vol
 
 from homeassistant.components import websocket_api
-from homeassistant.const import CONF_DOMAIN
+from homeassistant.const import CONF_DOMAIN, CONF_DEVICE_ID, CONF_PLATFORM
 from homeassistant.core import split_entity_id, HomeAssistant
 import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.entity_registry import async_entries_for_device
@@ -16,6 +16,16 @@ from homeassistant.loader import async_get_integration, IntegrationNotFound
 DOMAIN = "device_automation"
 
 _LOGGER = logging.getLogger(__name__)
+
+
+TRIGGER_SCHEMA = vol.Schema(
+    {
+        vol.Required(CONF_PLATFORM): "device",
+        vol.Required(CONF_DOMAIN): str,
+        vol.Required(CONF_DEVICE_ID): str,
+    },
+    extra=vol.ALLOW_EXTRA,
+)
 
 
 async def async_setup(hass, config):

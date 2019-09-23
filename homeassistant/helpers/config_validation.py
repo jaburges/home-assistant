@@ -828,7 +828,11 @@ OR_CONDITION_SCHEMA = vol.Schema(
 )
 
 DEVICE_CONDITION_SCHEMA = vol.Schema(
-    {vol.Required(CONF_CONDITION): "device", vol.Required(CONF_DOMAIN): str},
+    {
+        vol.Required(CONF_CONDITION): "device",
+        vol.Required(CONF_DOMAIN): str,
+        vol.Required(CONF_DEVICE_ID): str,
+    },
     extra=vol.ALLOW_EXTRA,
 )
 
@@ -863,7 +867,11 @@ _SCRIPT_WAIT_TEMPLATE_SCHEMA = vol.Schema(
 )
 
 DEVICE_ACTION_SCHEMA = vol.Schema(
-    {vol.Required(CONF_DEVICE_ID): string, vol.Required(CONF_DOMAIN): str},
+    {
+        vol.Required(CONF_DEVICE_ID): string,
+        vol.Required(CONF_DOMAIN): str,
+        vol.Required(CONF_DEVICE_ID): str,
+    },
     extra=vol.ALLOW_EXTRA,
 )
 
