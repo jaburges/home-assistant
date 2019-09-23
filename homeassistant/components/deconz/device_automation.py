@@ -171,16 +171,14 @@ REMOTES = {
     AQARA_SQUARE_SWITCH_MODEL: AQARA_SQUARE_SWITCH,
 }
 
-TRIGGER_SCHEMA = vol.All(
-    vol.Schema(
-        {
-            vol.Required(CONF_DEVICE_ID): str,
-            vol.Required(CONF_DOMAIN): DOMAIN,
-            vol.Required(CONF_PLATFORM): "device",
-            vol.Required(CONF_TYPE): str,
-            vol.Required(CONF_SUBTYPE): str,
-        }
-    )
+TRIGGER_SCHEMA = vol.Schema(
+    {
+        vol.Required(CONF_DEVICE_ID): str,
+        vol.Required(CONF_DOMAIN): DOMAIN,
+        vol.Required(CONF_PLATFORM): "device",
+        vol.Required(CONF_TYPE): str,
+        vol.Required(CONF_SUBTYPE): str,
+    }
 )
 
 
@@ -198,7 +196,7 @@ def _get_deconz_event_from_device_id(hass, device_id):
     return None
 
 
-async def async_trigger(hass, config, action, automation_info):
+async def async_attach_trigger(hass, config, action, automation_info):
     """Listen for state changes based on configuration."""
     config = TRIGGER_SCHEMA(config)
 
