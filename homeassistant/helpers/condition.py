@@ -45,10 +45,12 @@ ASYNC_FROM_CONFIG_FORMAT = "async_{}_from_config"
 
 _LOGGER = logging.getLogger(__name__)
 
+ConditionChecker = Callable[[HomeAssistant, TemplateVarsType], bool]
+
 
 async def async_from_config(
     hass: HomeAssistant, config: ConfigType, config_validation: bool = True
-) -> Callable[..., bool]:
+) -> ConditionChecker:
     """Turn a condition configuration into a method.
 
     Should be run on the event loop.
@@ -74,13 +76,13 @@ async def async_from_config(
         check_factory = check_factory.func
 
     if asyncio.iscoroutinefunction(check_factory):
-        return cast(Callable[..., bool], await factory(hass, config, config_validation))
-    return cast(Callable[..., bool], factory(config, config_validation))
+        return cast(ConditionChecker, await factory(hass, config, config_validation))
+    return cast(ConditionChecker, factory(config, config_validation))
 
 
 async def async_and_from_config(
     hass: HomeAssistant, config: ConfigType, config_validation: bool = True
-) -> Callable[..., bool]:
+) -> ConditionChecker:
     """Create multi condition matcher using 'AND'."""
     if config_validation:
         config = cv.AND_CONDITION_SCHEMA(config)
@@ -107,7 +109,7 @@ async def async_and_from_config(
 
 async def async_or_from_config(
     hass: HomeAssistant, config: ConfigType, config_validation: bool = True
-) -> Callable[..., bool]:
+) -> ConditionChecker:
     """Create multi condition matcher using 'OR'."""
     if config_validation:
         config = cv.OR_CONDITION_SCHEMA(config)
@@ -205,7 +207,7 @@ def async_numeric_state(
 
 def async_numeric_state_from_config(
     config: ConfigType, config_validation: bool = True
-) -> Callable[..., bool]:
+) -> ConditionChecker:
     """Wrap action method with state based condition."""
     if config_validation:
         config = cv.NUMERIC_STATE_CONDITION_SCHEMA(config)
@@ -255,7 +257,7 @@ def state(
 
 def state_from_config(
     config: ConfigType, config_validation: bool = True
-) -> Callable[..., bool]:
+) -> ConditionChecker:
     """Wrap action method with state based condition."""
     if config_validation:
         config = cv.STATE_CONDITION_SCHEMA(config)
@@ -327,7 +329,7 @@ def sun(
 
 def sun_from_config(
     config: ConfigType, config_validation: bool = True
-) -> Callable[..., bool]:
+) -> ConditionChecker:
     """Wrap action method with sun based condition."""
     if config_validation:
         config = cv.SUN_CONDITION_SCHEMA(config)
@@ -370,7 +372,7 @@ def async_template(
 
 def async_template_from_config(
     config: ConfigType, config_validation: bool = True
-) -> Callable[..., bool]:
+) -> ConditionChecker:
     """Wrap action method with state based condition."""
     if config_validation:
         config = cv.TEMPLATE_CONDITION_SCHEMA(config)
@@ -427,7 +429,7 @@ def time(
 
 def time_from_config(
     config: ConfigType, config_validation: bool = True
-) -> Callable[..., bool]:
+) -> ConditionChecker:
     """Wrap action method with time based condition."""
     if config_validation:
         config = cv.TIME_CONDITION_SCHEMA(config)
@@ -476,7 +478,7 @@ def zone(
 
 def zone_from_config(
     config: ConfigType, config_validation: bool = True
-) -> Callable[..., bool]:
+) -> ConditionChecker:
     """Wrap action method with zone based condition."""
     if config_validation:
         config = cv.ZONE_CONDITION_SCHEMA(config)
